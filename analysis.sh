@@ -38,7 +38,7 @@ y = dataframe["T"] / 1e9 # To convert it from nanoseconds to seconds
 plt.scatter(x, y)
 plt.xlabel("N")
 plt.ylabel("T (s)")
-plt.title("Efficiency of Albert's primesum algorithm in $HOSTNAME")
+plt.title("Efficiency of Javier's primesum algorithm in $HOSTNAME")
 plt.grid()
 # Uncomment the line below to also display the plot on-screen.
 #plt.show()
