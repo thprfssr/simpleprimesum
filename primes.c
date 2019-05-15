@@ -114,7 +114,7 @@ uint64_t partial_prime_sum(uint64_t a, uint64_t b)
 {
 	bool *sief = prime_sieve(a, b);
 	uint64_t s = 0;
-	for (int i = a; i < b; i++) {
+	for (uint64_t i = a; i < b; i++) {
 		if (sief[i - a] == true) {
 			//printf("%i is prime\n", i);
 			s += i;
