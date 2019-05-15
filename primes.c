@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <math.h>
 
-#define INTERVAL_SIZE 100003559
+#define INTERVAL_SIZE 1000000000
 
 bool *SIEVER = NULL;
 
