@@ -57,6 +57,13 @@ bool *create_sief(int size)
 	return sief;
 }
 
+void sief_set_true(bool *sief, int size)
+{
+	for (int i = 0; i < size; i++) {
+		sief[i] = true;
+	}
+}
+
 bool *prime_sieve(uint64_t a, uint64_t b)
 {
 	printf("Sieving between %" PRIu64 " and %" PRIu64 "...\n", a, b);
