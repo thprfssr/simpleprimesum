@@ -130,11 +130,11 @@ uint64_t total_prime_sum(uint64_t n)
 {
 	SIEVER = get_siever(n);
 
-	int q = n / INTERVAL_SIZE;
-	int r = n % INTERVAL_SIZE;
+	uint64_t q = n / INTERVAL_SIZE;
+	uint64_t r = n % INTERVAL_SIZE;
 
 	uint64_t s = 0;
-	for (int k = 0; k < q; k++) {
+	for (uint64_t k = 0; k < q; k++) {
 		s += partial_prime_sum(k * INTERVAL_SIZE, (k + 1) * INTERVAL_SIZE);
 	}
 	if (r > 0) {
