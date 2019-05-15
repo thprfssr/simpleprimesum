@@ -45,6 +45,18 @@ bool *get_siever(uint64_t n)
 	return list;
 }
 
+bool *create_sief(int size)
+{
+	bool *sief = NULL;
+	sief = malloc(n * sizeof(bool));
+	if (sief == NULL) {
+		printf("Error in prime_sieve(): Could not allocate enough memory! Exiting...\n");
+		exit(-1);
+	}
+
+	return sief;
+}
+
 bool *prime_sieve(uint64_t a, uint64_t b)
 {
 	printf("Sieving between %" PRIu64 " and %" PRIu64 "...\n", a, b);
