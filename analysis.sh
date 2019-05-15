@@ -44,4 +44,5 @@ plt.grid()
 #plt.show()
 plt.savefig("plot.png")
 plt.savefig("plot.pdf")
+plt.savefig("plot.svg")
 EOF
