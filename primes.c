@@ -45,6 +45,7 @@ bool *get_siever(uint64_t n)
 	return list;
 }
 
+/* Allocates memory for a sief */
 bool *create_sief(int size)
 {
 	bool *sief = NULL;
@@ -57,6 +58,7 @@ bool *create_sief(int size)
 	return sief;
 }
 
+/* Sets all the sief elements to true. */
 void sief_set_true(bool *sief, int size)
 {
 	for (int i = 0; i < size; i++) {
@@ -64,11 +66,20 @@ void sief_set_true(bool *sief, int size)
 	}
 }
 
-bool *prime_sieve(uint64_t a, uint64_t b)
+bool *prime_sieve(uint64_t a, uint64_t b, bool *sief, int size)
 {
 	printf("Sieving between %" PRIu64 " and %" PRIu64 "...\n", a, b);
+
 	if (!(a < b)) {
 		printf("Error in prime_sieve(): Lower bound must be strictly less than upper bound! Exiting...\n");
+		exit(-1);
+	}
+	if (!(b - a <= size)) {
+		printf("Error in prime_sieve(): Interval size must be less than or equal to the sieve size! Exiting...\n");
+		exit(-1);
+	}
+	if (sief == NULL) {
+		printf("Error in prime_sieve(): Sief is NULL! Exiting...\n");
 		exit(-1);
 	}
 
@@ -76,17 +87,8 @@ bool *prime_sieve(uint64_t a, uint64_t b)
 	uint64_t n = b - a;
 	bool *siever = SIEVER;
 
-	bool *sief = NULL;
-	sief = malloc(n * sizeof(bool));
-	if (sief == NULL) {
-		printf("Error in prime_sieve(): Could not allocate enough memory! Exiting...\n");
-		exit(-1);
-	}
-
 	// Initialize the sief elements all to true
-	for (int i = 0; i < n; i++) {
-		sief[i] = true;
-	}
+	sief_set_true(sief, size);
 
 	// Take care of the special cases of 0 and 1
 	if (a == 0) {
@@ -129,9 +131,9 @@ bool *prime_sieve(uint64_t a, uint64_t b)
 	return sief;
 }
 
-uint64_t partial_prime_sum(uint64_t a, uint64_t b)
+uint64_t partial_prime_sum(uint64_t a, uint64_t b, bool *sief, int size)
 {
-	bool *sief = prime_sieve(a, b);
+	sief = prime_sieve(a, b, sief, size);
 	uint64_t s = 0;
 	for (uint64_t i = a; i < b; i++) {
 		if (sief[i - a] == true) {
@@ -140,7 +142,6 @@ uint64_t partial_prime_sum(uint64_t a, uint64_t b)
 		}
 	}
 
-	free(sief);
 	printf("The sum of all the primes in [%" PRIu64 ", %" PRIu64 ") is:\n%" PRIu64 "\n", a, b, s);
 	return s;
 }
@@ -148,16 +149,17 @@ uint64_t partial_prime_sum(uint64_t a, uint64_t b)
 uint64_t total_prime_sum(uint64_t n)
 {
 	SIEVER = get_siever(n);
+	bool *sief = create_sief(INTERVAL_SIZE);
 
 	uint64_t q = n / INTERVAL_SIZE;
 	uint64_t r = n % INTERVAL_SIZE;
 
 	uint64_t s = 0;
 	for (uint64_t k = 0; k < q; k++) {
-		s += partial_prime_sum(k * INTERVAL_SIZE, (k + 1) * INTERVAL_SIZE);
+		s += partial_prime_sum(k * INTERVAL_SIZE, (k + 1) * INTERVAL_SIZE, sief, INTERVAL_SIZE);
 	}
 	if (r > 0) {
-		s += partial_prime_sum(q * INTERVAL_SIZE, n);
+		s += partial_prime_sum(q * INTERVAL_SIZE, n, sief, INTERVAL_SIZE);
 	}
 
 	printf("The total sum of all the primes strictly less than %" PRIu64 " is:\n%" PRIu64 "\n", n, s);
