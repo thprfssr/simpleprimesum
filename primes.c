@@ -145,11 +145,9 @@ uint64_t total_prime_sum(uint64_t n)
 	return s;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-	int a = 0;
-	int b = 1000000000;
-	int n = 1000000000;
+	uint64_t n = strtoull(argv[1], NULL, 10);
 	total_prime_sum(n);
 
 	return 0;
