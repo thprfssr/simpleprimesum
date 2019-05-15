@@ -48,7 +48,7 @@ bool *get_siever(uint64_t n)
 bool *create_sief(int size)
 {
 	bool *sief = NULL;
-	sief = malloc(n * sizeof(bool));
+	sief = malloc(size * sizeof(bool));
 	if (sief == NULL) {
 		printf("Error in prime_sieve(): Could not allocate enough memory! Exiting...\n");
 		exit(-1);
