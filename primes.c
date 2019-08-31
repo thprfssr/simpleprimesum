@@ -159,6 +159,7 @@ uint64_t total_prime_sum(uint64_t n)
 	uint64_t s = 0;
 	for (uint64_t k = 0; k < q; k++) {
 		s += partial_prime_sum(k * INTERVAL_SIZE, (k + 1) * INTERVAL_SIZE, sief, INTERVAL_SIZE);
+		printf("The running sum up to %" PRIu64 " is:\n%" PRIu64 "\n", (k + 1) * INTERVAL_SIZE, s);
 	}
 	if (r > 0) {
 		s += partial_prime_sum(q * INTERVAL_SIZE, n, sief, INTERVAL_SIZE);
@@ -180,6 +181,7 @@ uint64_t total_interval_prime_sum(uint64_t a, uint64_t b)
 	uint64_t s = 0;
 	for (uint64_t k = 0; k < q; k++) {
 		s += partial_prime_sum(k * INTERVAL_SIZE + a, (k + 1) * INTERVAL_SIZE + a, sief, INTERVAL_SIZE);
+		printf("The running sum within the interval [%" PRIu64 ", %" PRIu64 ") is:\n%" PRIu64 "\n", a, (k + 1) * INTERVAL_SIZE + a, s);
 	}
 	if (r > 0) {
 		s += partial_prime_sum(q * INTERVAL_SIZE + a, b, sief, INTERVAL_SIZE);
