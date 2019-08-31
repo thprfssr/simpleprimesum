@@ -7,6 +7,22 @@
 
 #define INTERVAL_SIZE 1000000000
 
+
+/* NOTE: I ran this program for N = 1T, and the sum that I got was the
+ * following: s = 9 394 869 854 112 614. Notice that this number is less than
+ * 2^64 (the modulo ring for uint64_t). Hence, we can't guarantee that this is
+ * the true sum; we can only say that this is the sum modulo 2^64.
+ *
+ * 2^64 = 18 446 744 073 709 551 616
+ *
+ * The uint64_t allows us to represent numbers with at most 19 decimal digits.
+ * And the obtained sum is almost 19 digits long. Hence, we have strong reason
+ * to believe that the running sum overflowed somewhere during the program's
+ * run time.
+ *
+ * I recommend to switch to GMP to handle arbitrary precision integers.
+ */
+
 bool *SIEVER = NULL;
 
 bool is_prime(uint64_t n)
