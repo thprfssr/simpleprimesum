@@ -70,6 +70,7 @@ bool *prime_sieve(uint64_t a, uint64_t b, bool *sief, int size)
 {
 	printf("Sieving between %" PRIu64 " and %" PRIu64 "...\n", a, b);
 
+	/* First check that several assumptions hold. If not, die. */
 	if (!(a < b)) {
 		printf("Error in prime_sieve(): Lower bound must be strictly less than upper bound! Exiting...\n");
 		exit(-1);
@@ -123,6 +124,7 @@ bool *prime_sieve(uint64_t a, uint64_t b, bool *sief, int size)
 			j += p;
 		}
 
+		/* Exit the loop if we go past b. */
 		if (p >= b) {
 			break;
 		}
@@ -163,6 +165,27 @@ uint64_t total_prime_sum(uint64_t n)
 	}
 
 	printf("The total sum of all the primes strictly less than %" PRIu64 " is:\n%" PRIu64 "\n", n, s);
+	return s;
+}
+
+uint64_t total_interval_prime_sum(uint64_t a, uint64_t b)
+{
+	SIEVER = get_siever(b);
+	bool *sief = create_sief(INTERVAL_SIZE);
+
+	uint64_t n = b - a;
+	uint64_t q = n / INTERVAL_SIZE;
+	uint64_t r = n % INTERVAL_SIZE;
+
+	uint64_t s = 0;
+	for (uint64_t k = 0; k < q; k++) {
+		s += partial_prime_sum(k * INTERVAL_SIZE + a, (k + 1) * INTERVAL_SIZE + a, sief, INTERVAL_SIZE);
+	}
+	if (r > 0) {
+		s += partial_prime_sum(q * INTERVAL_SIZE + a, b, sief, INTERVAL_SIZE);
+	}
+
+	printf("The total sum of all the primes in the interval [%" PRIu64 ", %" PRIu64 ") is:\n%" PRIu64 "\n", a, b, s);
 	return s;
 }
 
