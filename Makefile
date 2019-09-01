@@ -5,7 +5,7 @@ all: $(OBJECT)
 SOURCE = primes.c
 OBJECT = primesum.o
 OUTPUT = primesum
-LFLAGS = -lm
+LFLAGS = -lm -lgmp
 
 # Compilation flags to be added from the commandline (e.g. `-g` or `-DDEBUG`)
 CFLAGS += $(CLIFLAGS)
