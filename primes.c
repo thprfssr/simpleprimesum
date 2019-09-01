@@ -4,6 +4,7 @@
 #include <inttypes.h>
 #include <stdbool.h>
 #include <math.h>
+#include <gmp.h>
 
 #define INTERVAL_SIZE 1000000000
 
