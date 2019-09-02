@@ -150,22 +150,33 @@ bool *prime_sieve(uint64_t a, uint64_t b, bool *sief, int size)
 	return sief;
 }
 
-uint64_t partial_prime_sum(uint64_t a, uint64_t b, bool *sief, int size)
+char* partial_prime_sum(uint64_t a, uint64_t b, bool *sief, int size)
 {
 	sief = prime_sieve(a, b, sief, size);
-	uint64_t s = 0;
+	//uint64_t s = 0;
+	mpz_t s; // Declare a GMP Integer.
+	mpz_init(s); // Initialize s and set its value to zero.
 	for (uint64_t i = a; i < b; i++) {
 		if (sief[i - a] == true) {
 			//printf("%i is prime\n", i);
-			s += i;
+			mpz_add_ui(s, s, i);
+			//s += i;
 		}
 	}
 
-	printf("The sum of all the primes in [%" PRIu64 ", %" PRIu64 ") is:\n%" PRIu64 "\n", a, b, s);
-	return s;
+	char *str = NULL;
+	str = mpz_get_str(str, 10, s); // Convert s into a string in base ten.
+	mpz_clear(s); // Clear s and free its memory
+	if (str == NULL) {
+		printf("Error in partial_prime_sum(): str is NULL! Exiting...\n");
+		exit(-1);
+	}
+
+	printf("The sum of all the primes in [%" PRIu64 ", %" PRIu64 ") is:\n%s\n", a, b, str);
+	return str;
 }
 
-uint64_t total_prime_sum(uint64_t n)
+void total_prime_sum(uint64_t n)
 {
 	SIEVER = get_siever(n);
 	bool *sief = create_sief(INTERVAL_SIZE);
@@ -173,17 +184,39 @@ uint64_t total_prime_sum(uint64_t n)
 	uint64_t q = n / INTERVAL_SIZE;
 	uint64_t r = n % INTERVAL_SIZE;
 
-	uint64_t s = 0;
+	//uint64_t s = 0;
+	mpz_t s; // Declare a GMP Integer.
+	mpz_init(s); // Initialize s and set its value to zero
 	for (uint64_t k = 0; k < q; k++) {
-		s += partial_prime_sum(k * INTERVAL_SIZE, (k + 1) * INTERVAL_SIZE, sief, INTERVAL_SIZE);
-		printf("The running sum up to %" PRIu64 " is:\n%" PRIu64 "\n", (k + 1) * INTERVAL_SIZE, s);
+		char *str = partial_prime_sum(k * INTERVAL_SIZE, (k + 1) * INTERVAL_SIZE, sief, INTERVAL_SIZE);
+		mpz_t u;
+		mpz_init(u);
+		mpz_set_str(u, str, 10); // Set u to be equal to the value of the number in the string, in base ten
+		mpz_add(s, s, u);
+		mpz_clear(u);
+		//s += partial_prime_sum(k * INTERVAL_SIZE, (k + 1) * INTERVAL_SIZE, sief, INTERVAL_SIZE);
+		gmp_printf("The running sum up to %" PRIu64 " is:\n%Zd\n", (k + 1) * INTERVAL_SIZE, s);
 	}
 	if (r > 0) {
-		s += partial_prime_sum(q * INTERVAL_SIZE, n, sief, INTERVAL_SIZE);
+		//s += partial_prime_sum(q * INTERVAL_SIZE, n, sief, INTERVAL_SIZE);
+		char *str = partial_prime_sum(q * INTERVAL_SIZE, n, sief, INTERVAL_SIZE);
+		mpz_t u;
+		mpz_init(u);
+		mpz_set_str(u, str, 10);
+		mpz_add(s, s, u);
+		mpz_clear(u);
 	}
 
-	printf("The total sum of all the primes strictly less than %" PRIu64 " is:\n%" PRIu64 "\n", n, s);
-	return s;
+	char *str = NULL;
+	str = mpz_get_str(str, 10, s);
+	if (str == NULL) {
+		printf("Error in total_prime_sum(): str is NULL! Exiting...\n");
+		exit(-1);
+	}
+	mpz_clear(s);
+
+	printf("The total sum of all the primes strictly less than %" PRIu64 " is:\n%s\n", n, str);
+	//return s;
 }
 
 uint64_t total_interval_prime_sum(uint64_t a, uint64_t b)
